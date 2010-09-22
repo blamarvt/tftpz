@@ -6,7 +6,13 @@ import logging
 from SocketServer import UDPServer, ThreadingMixIn, BaseRequestHandler
 from itertools import count
 
-from restkit import request, RedirectLimit
+# Pick the best available HTTP library
+try:
+	from restkit import request
+except ImportError:
+	restkit = None
+	import urllib
+
 from daemonhelper import Daemon, make_main
 from dpkt.tftp import *
 from dpkt.udp import *
@@ -96,12 +102,19 @@ class TftpzHandler(BaseRequestHandler):
 		logger.info("client %s:%d requested %r" % (self.client_address + (filename,)))
 
 		url = "%s/%s" % (self.server.baseurl, filename)
-
-		req = request(url, follow_redirect=True)
-		status = req.status_int
+		
+		if restkit:
+			# Use restkit
+			req = request(url, follow_redirect=True)
+			status = req.status_int
+			body = req.body_stream()
+		else:
+			# Use urllib
+			body = urllib.urlopen(url)
+			status = body.getcode()
 
 		if 200 <= status < 300:
-			self._send_file(sock, self.client_address, req.body_stream())
+			self._send_file(sock, self.client_address, body)
 
 		elif status == 404:
 			raise TftpException(ENOTFOUND, "file not found")
