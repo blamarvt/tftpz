@@ -1,1 +1,40 @@
-TODO
+TFTPZ
+=====
+
+TFTP to HTTP proxy
+
+
+Requirements
+------------
+Python 2.6
+python-gevent
+python-daemonhelper
+dpkt
+
+
+Installation
+------------
+python setup.py install
+-OR-
+python setup.py bdist_rpm
+yum localinstall --nogpg dist/*.noarch.rpm
+
+
+Usage
+-----
+/etc/init.d/tftpz start
+-OR-
+/etc/init.d/tftpz foreground
+
+
+Configuration
+-------------
+/etc/tftpz.conf
+
+Example:
+'''
+[tftpz]
+listen: 0.0.0.0
+baseurl: http://127.0.0.1
+'''
+
