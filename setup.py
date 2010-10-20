@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
 		name="tftpz",
-		version="0.1",
+		version="0.2",
 		author="Brian Lamar",
 		author_email="brian.lamar@rackspace.com",
 		maintainer="Nicholas VonHollen",

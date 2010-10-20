@@ -13,7 +13,7 @@ except ImportError:
 	restkit = None
 	import urllib
 
-from daemonhelper import Daemon, make_main
+from daemonhelper import GeventDaemon, make_main
 from dpkt.tftp import *
 from dpkt.udp import *
 
@@ -131,7 +131,7 @@ class TftpzServer(ThreadingMixIn, UDPServer):
 
 		self.host, self.port = address
 
-class TftpzDaemon(Daemon):
+class TftpzDaemon(GeventDaemon):
 	name = "tftpz"
 	description = "Proxies TFTP requests to HTTP servers"
 
